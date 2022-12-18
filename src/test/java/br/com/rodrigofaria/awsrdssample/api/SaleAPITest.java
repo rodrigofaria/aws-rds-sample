@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
 import java.time.ZoneId;
@@ -34,13 +35,13 @@ public class SaleAPITest {
         SaleDTO saleDTO = createSaleDto();
         HttpEntity<SaleDTO> request = new HttpEntity<>(saleDTO);
         ResponseEntity<SaleDTO> response = template.postForEntity("/api/v1/sales", request, SaleDTO.class);
-        assertThat(response.getStatusCode()).isEqualTo(201);
+        assertThat(response.getStatusCode().value()).isEqualTo(201);
     }
 
     @Test
     public void delete_withValidId_shouldReturnStatusCode204() {
-        ResponseEntity<String> response = template.getForEntity("/api/v1/sales/123", String.class);
-        assertThat(response.getStatusCode()).isEqualTo(204);
+        ResponseEntity<String> response = template.exchange("/api/v1/sales/12", HttpMethod.DELETE, null, String.class);
+        assertThat(response.getStatusCode().value()).isEqualTo(204);
     }
 
     private SaleDTO createSaleDto() {

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -29,20 +30,20 @@ public class CustomerAPITest {
         CustomerDTO customerDTO = new CustomerDTO(1l, "Customer 1", "customer1@gmail.com", 12312312311l);
         HttpEntity<CustomerDTO> request = new HttpEntity<>(customerDTO);
         ResponseEntity<CustomerDTO> response = template.postForEntity("/api/v1/customers", request, CustomerDTO.class);
-        assertThat(response.getStatusCode()).isEqualTo(201);
+        assertThat(response.getStatusCode().value()).isEqualTo(201);
     }
 
     @Test
     public void update_withValidPayload_shouldReturnStatusCode200() {
         CustomerDTO customerDTO = new CustomerDTO(1l, "Customer 1", "customer1@gmail.com", 12312312311l);
         HttpEntity<CustomerDTO> request = new HttpEntity<>(customerDTO);
-        ResponseEntity<CustomerDTO> response = template.postForEntity("/api/v1/customers/123", request, CustomerDTO.class);
-        assertThat(response.getStatusCode()).isEqualTo(200);
+        ResponseEntity<CustomerDTO> response = template.exchange("/api/v1/customers/1", HttpMethod.PUT, request, CustomerDTO.class);
+        assertThat(response.getStatusCode().value()).isEqualTo(200);
     }
 
     @Test
     public void delete_withValidId_shouldReturnStatusCode204() {
-        ResponseEntity<String> response = template.getForEntity("/api/v1/customers/123", String.class);
-        assertThat(response.getStatusCode()).isEqualTo(204);
+        ResponseEntity<String> response = template.exchange("/api/v1/customers/123", HttpMethod.DELETE, null, String.class);
+        assertThat(response.getStatusCode().value()).isEqualTo(204);
     }
 }
