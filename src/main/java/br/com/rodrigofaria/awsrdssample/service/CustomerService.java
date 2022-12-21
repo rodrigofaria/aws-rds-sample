@@ -51,7 +51,10 @@ public class CustomerService {
     private Customer findById(Long id) {
         Optional<Customer> customer = customerRepository.findById(id);
         if (customer.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer with ID [" + id + "] not found.");
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    "Customer with ID [" + id + "] not found."
+            );
         }
 
         return customer.get();

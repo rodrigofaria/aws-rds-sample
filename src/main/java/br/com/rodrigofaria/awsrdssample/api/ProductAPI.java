@@ -1,6 +1,8 @@
 package br.com.rodrigofaria.awsrdssample.api;
 
 import br.com.rodrigofaria.awsrdssample.dto.ProductDTO;
+import br.com.rodrigofaria.awsrdssample.service.ProductService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,28 +19,27 @@ import java.util.List;
 @RequestMapping("api/v1/products")
 public class ProductAPI {
 
+    @Autowired
+    private ProductService productService;
+
     @GetMapping
     public List<ProductDTO> listAll() {
-        return List.of(
-                new ProductDTO(123l, "Nike Pro Dri-FIT", "Nike", 18.97),
-                new ProductDTO(124l, "Nike Winflo 9", "Nike", 75.97),
-                new ProductDTO(125l, "Jordan Air 200E\n", "Nike", 96.97)
-        );
+        return productService.listAll();
     }
 
     @PostMapping
     public ResponseEntity<ProductDTO> save(@RequestBody ProductDTO productDTO) {
-        ProductDTO product = new ProductDTO(123l, productDTO.name(), productDTO.brand(), productDTO.value());
-        return ResponseEntity.status(201).body(product);
+        return ResponseEntity.status(201).body(productService.save(productDTO));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<ProductDTO> update(@RequestBody ProductDTO productDTO, @PathVariable Long id) {
-        return ResponseEntity.ok(productDTO);
+        return ResponseEntity.ok(productService.update(productDTO, id));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ProductDTO> delete(@PathVariable Long id) {
+        productService.delete(id);
         return ResponseEntity.noContent().build();
     }
 }

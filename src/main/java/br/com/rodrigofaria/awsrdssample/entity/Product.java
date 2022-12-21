@@ -1,15 +1,25 @@
-package br.com.rodrigofaria.awsrdssample.dto;
+package br.com.rodrigofaria.awsrdssample.entity;
 
-public class ProductDTO {
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
+@Entity
+@Table(name = "product")
+public class Product {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String brand;
     private Double value;
 
-    public ProductDTO() { }
+    public Product() { }
 
-    public ProductDTO(Long id, String name, String brand, Double value) {
+    public Product(Long id, String name, String brand, Double value) {
         this.id = id;
         this.name = name;
         this.brand = brand;
@@ -46,14 +56,5 @@ public class ProductDTO {
 
     public void setValue(Double value) {
         this.value = value;
-    }
-
-    @Override
-    public String toString() {
-        return "ProductDTO[" +
-                "id=" + id + ", " +
-                "name=" + name + ", " +
-                "brand=" + brand + ", " +
-                "value=" + value + ']';
     }
 }
