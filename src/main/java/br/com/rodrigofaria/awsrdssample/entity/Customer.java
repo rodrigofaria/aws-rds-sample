@@ -1,15 +1,25 @@
-package br.com.rodrigofaria.awsrdssample.dto;
+package br.com.rodrigofaria.awsrdssample.entity;
 
-public class CustomerDTO {
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
+@Entity
+@Table(name = "customer")
+public class Customer {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String email;
     private Long cpf;
 
-    public CustomerDTO() { }
+    public Customer() { }
 
-    public CustomerDTO(Long id, String name, String email, Long cpf) {
+    public Customer(Long id, String name, String email, Long cpf) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -46,14 +56,5 @@ public class CustomerDTO {
 
     public void setCpf(Long cpf) {
         this.cpf = cpf;
-    }
-
-    @Override
-    public String toString() {
-        return "CustomerDTO[" +
-                "id=" + id + ", " +
-                "name=" + name + ", " +
-                "email=" + email + ", " +
-                "cpf=" + cpf + ']';
     }
 }

@@ -1,6 +1,8 @@
 package br.com.rodrigofaria.awsrdssample.api;
 
 import br.com.rodrigofaria.awsrdssample.dto.CustomerDTO;
+import br.com.rodrigofaria.awsrdssample.service.CustomerService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,28 +19,27 @@ import java.util.List;
 @RequestMapping("api/v1/customers")
 public class CustomerAPI {
 
+    @Autowired
+    private CustomerService customerService;
+
     @GetMapping
     public List<CustomerDTO> listAll() {
-        return List.of(
-                new CustomerDTO(1l, "Customer 1", "customer1@gmail.com", 12312312311l),
-                new CustomerDTO(2l, "Customer 2", "customer2@gmail.com", 12312312322l),
-                new CustomerDTO(3l, "Customer 3", "customer3@gmail.com", 12312312333l)
-                );
+        return customerService.listAll();
     }
 
     @PostMapping
     public ResponseEntity<CustomerDTO> save(@RequestBody CustomerDTO customerDTO) {
-        CustomerDTO customer = new CustomerDTO(1l, customerDTO.name(), customerDTO.email(), customerDTO.cpf());
-        return ResponseEntity.status(201).body(customer);
+        return ResponseEntity.status(201).body(customerService.save(customerDTO));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<CustomerDTO> update(@RequestBody CustomerDTO customerDTO, @PathVariable Long id) {
-        return ResponseEntity.ok(customerDTO);
+        return ResponseEntity.ok(customerService.update(customerDTO, id));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<CustomerDTO> delete(@PathVariable Long id) {
+        customerService.delete(id);
         return ResponseEntity.noContent().build();
     }
 }
