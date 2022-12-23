@@ -48,7 +48,7 @@ public class ProductService {
         return ProductMapper.entityToDto(product);
     }
 
-    private Product findById(Long id) {
+    public Product findById(Long id) {
         Optional<Product> product = productRepository.findById(id);
         if (product.isEmpty()) {
             throw new ResponseStatusException(

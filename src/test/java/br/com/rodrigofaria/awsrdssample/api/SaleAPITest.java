@@ -1,7 +1,5 @@
 package br.com.rodrigofaria.awsrdssample.api;
 
-import br.com.rodrigofaria.awsrdssample.dto.CustomerDTO;
-import br.com.rodrigofaria.awsrdssample.dto.ProductDTO;
 import br.com.rodrigofaria.awsrdssample.dto.SaleDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,8 +43,6 @@ public class SaleAPITest {
     }
 
     private SaleDTO createSaleDto() {
-        CustomerDTO c1 = new CustomerDTO(1l, "Customer 1", "customer1@gmail.com", 12312312311l);
-        ProductDTO p1 = new ProductDTO(123l, "Nike Pro Dri-FIT", "Nike", 18.97);
-        return new SaleDTO(1234l, c1, p1, ZonedDateTime.of(2022, 10, 20, 10, 25, 19, 0, ZoneId.systemDefault()));
+        return new SaleDTO(1234l, 1l, 1l, ZonedDateTime.of(2022, 10, 20, 10, 25, 19, 0, ZoneId.systemDefault()));
     }
 }

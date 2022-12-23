@@ -48,7 +48,7 @@ public class CustomerService {
         return CustomerMapper.entityToDto(customer);
     }
 
-    private Customer findById(Long id) {
+    public Customer findById(Long id) {
         Optional<Customer> customer = customerRepository.findById(id);
         if (customer.isEmpty()) {
             throw new ResponseStatusException(
