@@ -26,7 +26,7 @@ public class CustomerAPITest {
     public void setup() {
         for (long id = 1; id <= 3; id++) {
             CustomerDTO customerDTO = new CustomerDTO(
-                    id,
+                    null,
                     "Customer_" + id,
                     "customer" + id + "@gmail.com",
                     123123123 + id);

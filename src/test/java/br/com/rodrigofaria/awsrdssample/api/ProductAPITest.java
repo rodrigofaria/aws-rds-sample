@@ -26,7 +26,7 @@ public class ProductAPITest {
     public void setup() {
         for (long id = 1; id <= 3; id++) {
             ProductDTO productDTO = new ProductDTO(
-                    id,
+                    null,
                     "Tenis_" + id,
                     "Brand X",
                     18.97 + id);

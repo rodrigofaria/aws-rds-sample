@@ -63,7 +63,7 @@ public class SaleAPITest {
 
     private void createCustomer(long id) {
         CustomerDTO customerDTO = new CustomerDTO(
-                id,
+                null,
                 "Customer_" + id,
                 "customer" + id + "@gmail.com",
                 123123123 + id);
@@ -73,7 +73,7 @@ public class SaleAPITest {
 
     private void createProduct(long id) {
         ProductDTO productDTO = new ProductDTO(
-                id,
+                null,
                 "Tenis_" + id,
                 "Brand X",
                 18.97 + id);
