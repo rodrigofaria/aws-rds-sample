@@ -1,6 +1,7 @@
 package br.com.rodrigofaria.awsrdssample.api;
 
 import br.com.rodrigofaria.awsrdssample.dto.CustomerDTO;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -17,28 +18,27 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class CustomerAPITest {
+public class CustomerAPITest extends APITest {
+
+    private static final int QUANTITY_OF_CUSTOMER = 3;
 
     @Autowired
     private TestRestTemplate template;
 
     @BeforeAll
     public void setup() {
-        for (long id = 1; id <= 3; id++) {
-            CustomerDTO customerDTO = new CustomerDTO(
-                    null,
-                    "Customer_" + id,
-                    "customer" + id + "@gmail.com",
-                    123123123 + id);
-            HttpEntity<CustomerDTO> request = new HttpEntity<>(customerDTO);
-            template.postForEntity("/api/v1/customers", request, CustomerDTO.class);
-        }
+        createCustomer(template, QUANTITY_OF_CUSTOMER);
+    }
+
+    @AfterAll
+    public void tearDown() {
+        deleteAllCustomers(template);
     }
 
     @Test
     public void listAll_shouldReturnListWith3Customers() {
         ResponseEntity<List> response = template.getForEntity("/api/v1/customers", List.class);
-        assertThat(response.getBody().size()).isEqualTo(3);
+        assertThat(response.getBody().size()).isEqualTo(QUANTITY_OF_CUSTOMER);
     }
 
     @Test

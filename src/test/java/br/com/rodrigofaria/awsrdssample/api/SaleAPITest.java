@@ -3,6 +3,7 @@ package br.com.rodrigofaria.awsrdssample.api;
 import br.com.rodrigofaria.awsrdssample.dto.CustomerDTO;
 import br.com.rodrigofaria.awsrdssample.dto.ProductDTO;
 import br.com.rodrigofaria.awsrdssample.dto.SaleDTO;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -21,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class SaleAPITest {
+public class SaleAPITest extends APITest {
 
     @Autowired
     private TestRestTemplate template;
@@ -33,6 +34,11 @@ public class SaleAPITest {
             HttpEntity<SaleDTO> request = new HttpEntity<>(saleDTO);
             template.postForEntity("/api/v1/sales", request, SaleDTO.class);
         }
+    }
+
+    @AfterAll
+    public void tearDown() {
+        deleteAllSales(template);
     }
 
     @Test
@@ -56,28 +62,20 @@ public class SaleAPITest {
     }
 
     private SaleDTO createSaleDto(long id) {
-        createCustomer(id);
-        createProduct(id);
-        return new SaleDTO(id, id, id, ZonedDateTime.of(2022, 10, 20, 10, 25, 19, 0, ZoneId.systemDefault()));
-    }
+        long customerId = 0;
+        createCustomer(template, (int) id);
+        CustomerDTO[] response = template.getForObject("/api/v1/customers", CustomerDTO[].class);
+        if (response.length > 0) {
+            customerId = response[0].getId();
+        }
 
-    private void createCustomer(long id) {
-        CustomerDTO customerDTO = new CustomerDTO(
-                null,
-                "Customer_" + id,
-                "customer" + id + "@gmail.com",
-                123123123 + id);
-        HttpEntity<CustomerDTO> request = new HttpEntity<>(customerDTO);
-        template.postForEntity("/api/v1/customers", request, CustomerDTO.class);
-    }
+        long productId = 0;
+        createProduct(template, (int) id);
+        ProductDTO[] response2 = template.getForObject("/api/v1/products", ProductDTO[].class);
+        if (response2.length > 0) {
+            productId = response2[0].getId();
+        }
 
-    private void createProduct(long id) {
-        ProductDTO productDTO = new ProductDTO(
-                null,
-                "Tenis_" + id,
-                "Brand X",
-                18.97 + id);
-        HttpEntity<ProductDTO> request = new HttpEntity<>(productDTO);
-        template.postForEntity("/api/v1/products", request, ProductDTO.class);
+        return new SaleDTO(null, customerId, productId, ZonedDateTime.of(2022, 10, 20, 10, 25, 19, 0, ZoneId.systemDefault()));
     }
 }

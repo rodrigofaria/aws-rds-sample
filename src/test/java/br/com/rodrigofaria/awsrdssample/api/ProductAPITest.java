@@ -1,6 +1,7 @@
 package br.com.rodrigofaria.awsrdssample.api;
 
 import br.com.rodrigofaria.awsrdssample.dto.ProductDTO;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -17,28 +18,27 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class ProductAPITest {
+public class ProductAPITest extends APITest {
+
+    private static final int QUANTITY_OF_PRODUCT = 3;
 
     @Autowired
     private TestRestTemplate template;
 
     @BeforeAll
     public void setup() {
-        for (long id = 1; id <= 3; id++) {
-            ProductDTO productDTO = new ProductDTO(
-                    null,
-                    "Tenis_" + id,
-                    "Brand X",
-                    18.97 + id);
-            HttpEntity<ProductDTO> request = new HttpEntity<>(productDTO);
-            template.postForEntity("/api/v1/products", request, ProductDTO.class);
-        }
+        createProduct(template, QUANTITY_OF_PRODUCT);
+    }
+
+    @AfterAll
+    public void tearDown() {
+        deleteAllProducts(template);
     }
 
     @Test
     public void listAll_shouldReturnListWith3Products() {
         ResponseEntity<List> response = template.getForEntity("/api/v1/products", List.class);
-        assertThat(response.getBody().size()).isEqualTo(3);
+        assertThat(response.getBody().size()).isEqualTo(QUANTITY_OF_PRODUCT);
     }
 
     @Test
