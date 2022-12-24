@@ -1,7 +1,9 @@
 package br.com.rodrigofaria.awsrdssample.api;
 
 import br.com.rodrigofaria.awsrdssample.dto.ProductDTO;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -14,10 +16,24 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ProductAPITest {
 
     @Autowired
     private TestRestTemplate template;
+
+    @BeforeAll
+    public void setup() {
+        for (long id = 1; id <= 3; id++) {
+            ProductDTO productDTO = new ProductDTO(
+                    id,
+                    "Tenis_" + id,
+                    "Brand X",
+                    18.97 + id);
+            HttpEntity<ProductDTO> request = new HttpEntity<>(productDTO);
+            template.postForEntity("/api/v1/products", request, ProductDTO.class);
+        }
+    }
 
     @Test
     public void listAll_shouldReturnListWith3Products() {
@@ -35,15 +51,18 @@ public class ProductAPITest {
 
     @Test
     public void update_withValidPayload_shouldReturnStatusCode200() {
-        ProductDTO productDTO = new ProductDTO(123l, "Nike Pro Dri-FIT", "Nike", 18.97);
+        ProductDTO productDTO = new ProductDTO(1l, "Nike Pro Dri-FIT", "Nike", 18.97);
         HttpEntity<ProductDTO> request = new HttpEntity<>(productDTO);
-        ResponseEntity<ProductDTO> response = template.exchange("/api/v1/products/123", HttpMethod.PUT, request, ProductDTO.class);
+        ResponseEntity<ProductDTO> response = template.exchange("/api/v1/products/1", HttpMethod.PUT, request, ProductDTO.class);
         assertThat(response.getStatusCode().value()).isEqualTo(200);
+        assertThat(response.getBody().getName()).isEqualTo("Nike Pro Dri-FIT");
+        assertThat(response.getBody().getBrand()).isEqualTo("Nike");
+        assertThat(response.getBody().getValue()).isEqualTo(18.97);
     }
 
     @Test
     public void delete_withValidId_shouldReturnStatusCode204() {
-        ResponseEntity<String> response = template.exchange("/api/v1/products/123", HttpMethod.DELETE, null, String.class);
+        ResponseEntity<String> response = template.exchange("/api/v1/products/2", HttpMethod.DELETE, null, String.class);
         assertThat(response.getStatusCode().value()).isEqualTo(204);
     }
 }
