@@ -162,3 +162,10 @@ gradle-app.setting
 ### Gradle Patch ###
 # Java heap dump
 *.hprof
+
+# Terraform
+terraform/.terraform*
+terraform/.terraform/**
+terraform/.factorypath
+terraform/terraform.tfstate*
+terraform/tfplan
