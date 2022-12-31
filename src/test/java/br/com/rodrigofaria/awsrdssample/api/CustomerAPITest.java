@@ -1,5 +1,6 @@
 package br.com.rodrigofaria.awsrdssample.api;
 
+import br.com.rodrigofaria.awsrdssample.common.FakeDataUtil;
 import br.com.rodrigofaria.awsrdssample.dto.CustomerDTO;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -43,7 +44,7 @@ public class CustomerAPITest extends APITest {
 
     @Test
     public void save_withValidPayload_shouldReturnStatusCode201() {
-        CustomerDTO customerDTO = new CustomerDTO(1l, "Customer 1", "customer1@gmail.com", 12312312311l);
+        CustomerDTO customerDTO = FakeDataUtil.createCustomerDTO(1);
         HttpEntity<CustomerDTO> request = new HttpEntity<>(customerDTO);
         ResponseEntity<CustomerDTO> response = template.postForEntity("/api/v1/customers", request, CustomerDTO.class);
         assertThat(response.getStatusCode().value()).isEqualTo(201);
@@ -51,13 +52,13 @@ public class CustomerAPITest extends APITest {
 
     @Test
     public void update_withValidPayload_shouldReturnStatusCode200() {
-        CustomerDTO customerDTO = new CustomerDTO(1l, "Customer1_edit", "customer1_edit@gmail.com", 123123l);
+        CustomerDTO customerDTO = FakeDataUtil.createCustomerDTO(10);
         HttpEntity<CustomerDTO> request = new HttpEntity<>(customerDTO);
         ResponseEntity<CustomerDTO> response = template.exchange("/api/v1/customers/1", HttpMethod.PUT, request, CustomerDTO.class);
         assertThat(response.getStatusCode().value()).isEqualTo(200);
-        assertThat(response.getBody().getName()).isEqualTo("Customer1_edit");
-        assertThat(response.getBody().getEmail()).isEqualTo("customer1_edit@gmail.com");
-        assertThat(response.getBody().getCpf()).isEqualTo(123123l);
+        assertThat(response.getBody().getName()).isEqualTo(customerDTO.getName());
+        assertThat(response.getBody().getEmail()).isEqualTo(customerDTO.getEmail());
+        assertThat(response.getBody().getCpf()).isEqualTo(customerDTO.getCpf());
     }
 
     @Test

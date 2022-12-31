@@ -33,7 +33,7 @@ public class SaleService {
         Iterable<Sale> saleList = saleRepository.findAll();
         List<SaleDTO> saleDTOList = new ArrayList<>();
         saleList.forEach(saleEntity ->
-                saleDTOList.add(SaleMapper.entityToDto(saleEntity))
+            saleDTOList.add(SaleMapper.entityToDto(saleEntity))
         );
 
         return saleDTOList;

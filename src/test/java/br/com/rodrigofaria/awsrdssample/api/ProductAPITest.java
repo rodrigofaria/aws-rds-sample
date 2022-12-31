@@ -1,5 +1,6 @@
 package br.com.rodrigofaria.awsrdssample.api;
 
+import br.com.rodrigofaria.awsrdssample.common.FakeDataUtil;
 import br.com.rodrigofaria.awsrdssample.dto.ProductDTO;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -43,7 +44,7 @@ public class ProductAPITest extends APITest {
 
     @Test
     public void save_withValidPayload_shouldReturnStatusCode201() {
-        ProductDTO productDTO = new ProductDTO(123l, "Nike Pro Dri-FIT", "Nike", 18.97);
+        ProductDTO productDTO = FakeDataUtil.createProductDTO(1);
         HttpEntity<ProductDTO> request = new HttpEntity<>(productDTO);
         ResponseEntity<ProductDTO> response = template.postForEntity("/api/v1/products", request, ProductDTO.class);
         assertThat(response.getStatusCode().value()).isEqualTo(201);
@@ -51,13 +52,13 @@ public class ProductAPITest extends APITest {
 
     @Test
     public void update_withValidPayload_shouldReturnStatusCode200() {
-        ProductDTO productDTO = new ProductDTO(1l, "Nike Pro Dri-FIT", "Nike", 18.97);
+        ProductDTO productDTO = FakeDataUtil.createProductDTO(21);
         HttpEntity<ProductDTO> request = new HttpEntity<>(productDTO);
         ResponseEntity<ProductDTO> response = template.exchange("/api/v1/products/1", HttpMethod.PUT, request, ProductDTO.class);
         assertThat(response.getStatusCode().value()).isEqualTo(200);
-        assertThat(response.getBody().getName()).isEqualTo("Nike Pro Dri-FIT");
-        assertThat(response.getBody().getBrand()).isEqualTo("Nike");
-        assertThat(response.getBody().getValue()).isEqualTo(18.97);
+        assertThat(response.getBody().getName()).isEqualTo(productDTO.getName());
+        assertThat(response.getBody().getBrand()).isEqualTo(productDTO.getBrand());
+        assertThat(response.getBody().getValue()).isEqualTo(productDTO.getValue());
     }
 
     @Test

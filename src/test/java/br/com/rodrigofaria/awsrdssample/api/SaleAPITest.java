@@ -1,5 +1,6 @@
 package br.com.rodrigofaria.awsrdssample.api;
 
+import br.com.rodrigofaria.awsrdssample.common.FakeDataUtil;
 import br.com.rodrigofaria.awsrdssample.dto.CustomerDTO;
 import br.com.rodrigofaria.awsrdssample.dto.ProductDTO;
 import br.com.rodrigofaria.awsrdssample.dto.SaleDTO;
@@ -14,8 +15,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -76,6 +75,6 @@ public class SaleAPITest extends APITest {
             productId = response2[0].getId();
         }
 
-        return new SaleDTO(null, customerId, productId, ZonedDateTime.of(2022, 10, 20, 10, 25, 19, 0, ZoneId.systemDefault()));
+        return FakeDataUtil.createSaleDTO(customerId, productId);
     }
 }

@@ -1,5 +1,6 @@
 package br.com.rodrigofaria.awsrdssample.api;
 
+import br.com.rodrigofaria.awsrdssample.common.FakeDataUtil;
 import br.com.rodrigofaria.awsrdssample.dto.CustomerDTO;
 import br.com.rodrigofaria.awsrdssample.dto.ProductDTO;
 import br.com.rodrigofaria.awsrdssample.dto.SaleDTO;
@@ -11,11 +12,7 @@ public class APITest {
 
     public void createCustomer(TestRestTemplate template, int quantity) {
         for (long id = 1; id <= quantity; id++) {
-            CustomerDTO customerDTO = new CustomerDTO(
-                    null,
-                    "Customer_" + id,
-                    "customer" + id + "@gmail.com",
-                    123123123 + id);
+            CustomerDTO customerDTO = FakeDataUtil.createCustomerDTO(id);
             HttpEntity<CustomerDTO> request = new HttpEntity<>(customerDTO);
             template.postForEntity("/api/v1/customers", request, CustomerDTO.class);
         }
@@ -23,11 +20,7 @@ public class APITest {
 
     public void createProduct(TestRestTemplate template, int quantity) {
         for (long id = 1; id <= quantity; id++) {
-            ProductDTO productDTO = new ProductDTO(
-                    null,
-                    "Tenis_" + id,
-                    "Brand X",
-                    18.97 + id);
+            ProductDTO productDTO = FakeDataUtil.createProductDTO(id);
             HttpEntity<ProductDTO> request = new HttpEntity<>(productDTO);
             template.postForEntity("/api/v1/products", request, ProductDTO.class);
         }
