@@ -16,12 +16,12 @@ provider "aws" {
 resource "aws_db_instance" "default" {
   identifier            = "rds-database"
   allocated_storage     = 20
-  db_name               = "samplerds"
+  db_name               = var.database_name
   engine                = "postgres"
   engine_version        = "14"
   instance_class        = "db.t3.micro"
-  username              = "samplerdsusername"
-  password              = "sample-rds-password"
+  username              = var.database_username
+  password              = var.database_password
   publicly_accessible   = true
   skip_final_snapshot   = true
 }
