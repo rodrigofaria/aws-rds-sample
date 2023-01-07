@@ -72,6 +72,12 @@ Now to run the application, just execute the command below:
 
 ## Postman
 
+The `postman` folder has a file called `aws-rds-sample.postman_collection.json` that could be imported into a [Postman](https://www.postman.com) application.
+
+The file contains a collection of all the operations that this API gives:
+
+![Postman Collection](doc/postman.png)
+
 ## Unit Test
 
 The project contains some unit tests.
