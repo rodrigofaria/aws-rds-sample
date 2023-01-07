@@ -68,6 +68,10 @@ Now to run the application, just execute the command below:
 
 ## Database Schema
 
+The image below represents the tables that will be created after the project starts:
+
+![Database Schema](doc/database_schema.png)
+
 ## Swagger
 
 ## Postman
