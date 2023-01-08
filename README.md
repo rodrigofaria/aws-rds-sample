@@ -74,6 +74,12 @@ The image below represents the tables that will be created after the project sta
 
 ## Swagger
 
+The project is using `springdoc-openapi-starter-webmvc-ui` library. So after starting the application you can check the Swagger documentation in the link below:
+
+```
+http://<URL>/swagger-ui/index.html
+```
+
 ## Postman
 
 The `postman` folder has a file called `aws-rds-sample.postman_collection.json` that could be imported into a [Postman](https://www.postman.com) application.
